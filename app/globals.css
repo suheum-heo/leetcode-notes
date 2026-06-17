@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo,
+    Consolas, monospace;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #0a0a0b;
+  color: #e7e7ea;
+}
+
+/* GitHub-dark-dimmed flavored highlight.js theme */
+.hljs {
+  color: #adbac7;
+  background: transparent;
+}
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  color: #f47067;
+}
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  color: #dcbdfb;
+}
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id,
+.hljs-variable {
+  color: #6cb6ff;
+}
+.hljs-string,
+.hljs-regexp,
+.hljs-meta .hljs-string {
+  color: #96d0ff;
+}
+.hljs-built_in,
+.hljs-symbol {
+  color: #f69d50;
+}
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+  color: #768390;
+}
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  color: #8ddb8c;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: 700;
+}
+
+/* Prose styles for rendered markdown */
+.prose-notes {
+  line-height: 1.7;
+}
+.prose-notes h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 1.5rem 0 1rem;
+}
+.prose-notes h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 2rem 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #1f1f23;
+}
+.prose-notes h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+}
+.prose-notes p {
+  margin: 0.85rem 0;
+  color: #c5c5cc;
+}
+.prose-notes ul,
+.prose-notes ol {
+  margin: 0.85rem 0;
+  padding-left: 1.4rem;
+  color: #c5c5cc;
+}
+.prose-notes ul {
+  list-style: disc;
+}
+.prose-notes ol {
+  list-style: decimal;
+}
+.prose-notes li {
+  margin: 0.35rem 0;
+}
+.prose-notes a {
+  color: #7cc4ff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-notes blockquote {
+  border-left: 3px solid #2f81f7;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #9a9aa3;
+  font-style: italic;
+}
+.prose-notes code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: #1a1a1f;
+  border: 1px solid #26262c;
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.35rem;
+  color: #f0b3a4;
+}
+.prose-notes pre {
+  background: #131318;
+  border: 1px solid #26262c;
+  border-radius: 0.75rem;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  margin: 1.1rem 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.prose-notes pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+.prose-notes table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+.prose-notes th,
+.prose-notes td {
+  border: 1px solid #26262c;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.prose-notes th {
+  background: #16161b;
+  font-weight: 600;
+}
+.prose-notes hr {
+  border: none;
+  border-top: 1px solid #1f1f23;
+  margin: 2rem 0;
+}
