@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Problem } from "@/lib/problems";
 import { DifficultyBadge } from "./DifficultyBadge";
+import { StatusBadge } from "./StatusBadge";
 
 export function ProblemCard({ problem }: { problem: Problem }) {
   return (
@@ -28,9 +29,14 @@ export function ProblemCard({ problem }: { problem: Problem }) {
         </div>
       )}
 
-      {problem.dateSolved && (
-        <p className="mt-3 text-xs text-zinc-600">Solved {problem.dateSolved}</p>
-      )}
+      <div className="mt-3 flex items-center justify-between gap-2">
+        {problem.dateSolved ? (
+          <p className="text-xs text-zinc-600">Solved {problem.dateSolved}</p>
+        ) : (
+          <span />
+        )}
+        <StatusBadge status={problem.status} />
+      </div>
     </Link>
   );
 }

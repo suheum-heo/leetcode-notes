@@ -5,8 +5,10 @@ import {
   getAllSlugs,
   getProblemBySlug,
   getProblemsByPattern,
+  isPersonalNotePending,
 } from "@/lib/problems";
 import { DifficultyBadge } from "@/app/components/DifficultyBadge";
+import { StatusBadge } from "@/app/components/StatusBadge";
 import { Markdown } from "@/app/components/Markdown";
 
 interface PageProps {
@@ -39,6 +41,8 @@ export default async function ProblemPage({ params }: PageProps) {
     .find((group) => group.pattern === problem.pattern)
     ?.problems.filter((p) => p.slug !== problem.slug);
 
+  const notesPending = isPersonalNotePending(problem);
+
   return (
     <article className="pb-8">
       <Link
@@ -54,6 +58,7 @@ export default async function ProblemPage({ params }: PageProps) {
             {problem.pattern}
           </span>
           <DifficultyBadge difficulty={problem.difficulty} />
+          <StatusBadge status={problem.status} />
         </div>
 
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-zinc-50">
@@ -87,6 +92,18 @@ export default async function ProblemPage({ params }: PageProps) {
           </div>
         )}
       </header>
+
+      {notesPending && (
+        <div className="mt-6 flex items-start gap-2.5 rounded-lg border border-amber-500/20 bg-amber-500/5 px-4 py-3 text-sm text-amber-200/90">
+          <span aria-hidden className="mt-0.5 text-amber-400">
+            &#9998;
+          </span>
+          <span>
+            Personal notes not added yet — this note still has starter content
+            waiting for your own words.
+          </span>
+        </div>
+      )}
 
       <div className="mt-8">
         <Markdown content={problem.content} />

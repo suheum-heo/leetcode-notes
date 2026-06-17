@@ -2,16 +2,24 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 
-export type Difficulty = "Easy" | "Medium" | "Hard";
+export type Difficulty = "Easy" | "Medium" | "Hard" | "Unknown";
+
+export type ProblemStatus =
+  | "complete"
+  | "needs-personal-notes"
+  | "needs-fill";
 
 export interface ProblemFrontmatter {
   title: string;
   slug: string;
   difficulty: Difficulty;
   pattern: string;
+  leetcodeNumber?: number | null;
   leetcodeUrl?: string;
   dateSolved?: string;
   tags?: string[];
+  source?: string;
+  status?: ProblemStatus;
 }
 
 export interface Problem extends ProblemFrontmatter {
@@ -44,11 +52,57 @@ function parseProblem(fileName: string): Problem {
     slug: data.slug ?? fallbackSlug,
     difficulty: (data.difficulty ?? "Easy") as Difficulty,
     pattern: data.pattern ?? "Uncategorized",
-    leetcodeUrl: data.leetcodeUrl,
+    leetcodeNumber:
+      typeof data.leetcodeNumber === "number" ? data.leetcodeNumber : null,
+    leetcodeUrl: data.leetcodeUrl ?? undefined,
     dateSolved: data.dateSolved,
     tags: Array.isArray(data.tags) ? data.tags : [],
+    source: data.source ?? undefined,
+    status: (data.status ?? undefined) as ProblemStatus | undefined,
     content,
   };
+}
+
+/**
+ * Extract the body of a `## Heading` markdown section (until the next `##`).
+ * Returns null when the section is absent.
+ */
+function extractSection(content: string, heading: string): string | null {
+  const lines = content.split(/\r?\n/);
+  const body: string[] = [];
+  let capturing = false;
+
+  for (const line of lines) {
+    const match = /^##\s+(.*?)\s*$/.exec(line);
+    if (match) {
+      if (capturing) break;
+      if (match[1].toLowerCase() === heading.toLowerCase()) {
+        capturing = true;
+        continue;
+      }
+    } else if (capturing) {
+      body.push(line);
+    }
+  }
+
+  return capturing ? body.join("\n") : null;
+}
+
+/** True when a "My First Approach" section exists but has no real content. */
+export function hasEmptyMyFirstApproach(content: string): boolean {
+  const section = extractSection(content, "My First Approach");
+  if (section === null) return false;
+  const cleaned = section.replace(/<!--[\s\S]*?-->/g, "").trim();
+  return cleaned.length === 0;
+}
+
+/** Whether a problem still needs author attention (badge + reminder). */
+export function isPersonalNotePending(problem: Problem): boolean {
+  return (
+    problem.status === "needs-personal-notes" ||
+    problem.status === "needs-fill" ||
+    hasEmptyMyFirstApproach(problem.content)
+  );
 }
 
 export function getAllProblems(): Problem[] {

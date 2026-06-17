@@ -1,0 +1,122 @@
+{
+  "contains-duplicate": {
+    "leetcodeNumber": 217,
+    "title": "Contains Duplicate",
+    "slug": "contains-duplicate",
+    "difficulty": "Easy",
+    "pattern": "Arrays & Hashing",
+    "leetcodeUrl": "https://leetcode.com/problems/contains-duplicate/",
+    "tags": ["set", "hashing", "duplicates"],
+    "starter": {
+      "coreIdea": "If duplicates exist, the number of unique values is smaller than the original list. Collapsing the numbers into a set removes duplicates, so comparing sizes answers the question.",
+      "pattern": "Hash Set / uniqueness check. When you need to know whether you've \"seen something before\", reach for a hash set — membership checks and insertions are both `O(1)` on average.",
+      "standardApproach": "Insert each number into a set while scanning. If a number is already present, you've found a duplicate and can return early. Otherwise the whole array is unique.",
+      "language": "python",
+      "keyCode": "def containsDuplicate(nums: list[int]) -> bool:\n    seen = set()\n    for n in nums:\n        if n in seen:\n            return True\n        seen.add(n)\n    return False",
+      "whyItWorks": "A set guarantees uniqueness, so the first time an insert collides with an existing element you have proof of a duplicate. The early return avoids scanning the rest of the array.",
+      "timeComplexity": "O(n) — a single pass over the input.",
+      "spaceComplexity": "O(n) — the set may hold every element.",
+      "similarProblems": ["Two Sum", "Valid Anagram", "Longest Consecutive Sequence"]
+    }
+  },
+  "two-sum": {
+    "leetcodeNumber": 1,
+    "title": "Two Sum",
+    "slug": "two-sum",
+    "difficulty": "Easy",
+    "pattern": "Arrays & Hashing",
+    "leetcodeUrl": "https://leetcode.com/problems/two-sum/",
+    "tags": ["hashmap", "complement"],
+    "starter": {
+      "coreIdea": "For each number `x`, the partner you need is `target - x`. Instead of searching for that partner with a second loop, remember every number you've already seen in a hash map so the lookup is instant.",
+      "pattern": "Hash Map / complement lookup. The canonical \"trade space for time\" trick: an `O(n^2)` brute force collapses to `O(n)` by caching what you've seen.",
+      "standardApproach": "Walk the array once. For each element compute its complement and check the map; if present, return both indices. Otherwise store the current value and index.",
+      "language": "python",
+      "keyCode": "def twoSum(nums: list[int], target: int) -> list[int]:\n    seen = {}  # value -> index\n    for i, n in enumerate(nums):\n        complement = target - n\n        if complement in seen:\n            return [seen[complement], i]\n        seen[n] = i\n    return []",
+      "whyItWorks": "By the time you reach element `i`, every earlier element is in the map. So if a valid pair ends at `i`, its partner was already recorded and is found in `O(1)`.",
+      "timeComplexity": "O(n) — one pass with constant-time map operations.",
+      "spaceComplexity": "O(n) — up to n entries in the map.",
+      "similarProblems": ["Contains Duplicate", "Two Sum II - Input Array Is Sorted", "3Sum"]
+    }
+  },
+  "valid-anagram": {
+    "leetcodeNumber": 242,
+    "title": "Valid Anagram",
+    "slug": "valid-anagram",
+    "difficulty": "Easy",
+    "pattern": "Arrays & Hashing",
+    "leetcodeUrl": "https://leetcode.com/problems/valid-anagram/",
+    "tags": ["counting", "frequency", "strings"],
+    "starter": {
+      "coreIdea": "Two strings are anagrams iff they contain the same characters with the same frequencies. Count letters in one string, then subtract while scanning the other — everything should cancel to zero.",
+      "pattern": "Frequency counting with a hash map (or a fixed-size array for a known alphabet).",
+      "standardApproach": "Build a frequency table for the first string and compare it to the frequency table of the second. For a lowercase-only alphabet a 26-length array keeps it `O(1)` space.",
+      "language": "python",
+      "keyCode": "def isAnagram(s: str, t: str) -> bool:\n    if len(s) != len(t):\n        return False\n    counts = [0] * 26\n    for cs, ct in zip(s, t):\n        counts[ord(cs) - ord(\"a\")] += 1\n        counts[ord(ct) - ord(\"a\")] -= 1\n    return all(c == 0 for c in counts)",
+      "whyItWorks": "Incrementing for `s` and decrementing for `t` means equal frequencies cancel out. Any leftover non-zero count proves a mismatch.",
+      "timeComplexity": "O(n) — one pass over both strings.",
+      "spaceComplexity": "O(1) for the fixed 26-letter array (O(k) for a general alphabet of size k).",
+      "similarProblems": ["Group Anagrams", "Contains Duplicate", "Find All Anagrams in a String"]
+    }
+  },
+  "best-time-to-buy-and-sell-stock": {
+    "leetcodeNumber": 121,
+    "title": "Best Time to Buy and Sell Stock",
+    "slug": "best-time-to-buy-and-sell-stock",
+    "difficulty": "Easy",
+    "pattern": "Sliding Window",
+    "leetcodeUrl": "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/",
+    "tags": ["sliding-window", "greedy"],
+    "starter": {
+      "coreIdea": "Track the lowest price seen so far (your best buy day). For each later day, compute the profit if you sold today and keep the maximum.",
+      "pattern": "Sliding Window / single-pass greedy. Treat `left` as the buy day and `right` as the sell day; whenever a new minimum appears, slide `left` to it.",
+      "standardApproach": "Maintain a running minimum price and a running best profit. For every price, update the minimum, then update the best profit with `price - min`.",
+      "language": "python",
+      "keyCode": "def maxProfit(prices: list[int]) -> int:\n    min_price = float(\"inf\")\n    best = 0\n    for price in prices:\n        min_price = min(min_price, price)\n        best = max(best, price - min_price)\n    return best",
+      "whyItWorks": "You never need to look back: once a cheaper buy price appears, the old one is strictly worse for every future sell day, so keeping only the minimum is sufficient.",
+      "timeComplexity": "O(n) — one pass.",
+      "spaceComplexity": "O(1) — two scalars.",
+      "similarProblems": ["Maximum Subarray", "Best Time to Buy and Sell Stock II", "Best Time to Buy and Sell Stock with Cooldown"]
+    }
+  },
+  "valid-parentheses": {
+    "leetcodeNumber": 20,
+    "title": "Valid Parentheses",
+    "slug": "valid-parentheses",
+    "difficulty": "Easy",
+    "pattern": "Stack",
+    "leetcodeUrl": "https://leetcode.com/problems/valid-parentheses/",
+    "tags": ["stack", "matching"],
+    "starter": {
+      "coreIdea": "Brackets must close in the reverse order they opened — that \"last opened, first closed\" rule is exactly a stack. Push opens, and on each closer make sure it matches the most recent open.",
+      "pattern": "Stack — for nested / balanced structure problems.",
+      "standardApproach": "Scan the string. Push opening brackets; on a closing bracket, pop and verify it matches. A valid string ends with an empty stack.",
+      "language": "python",
+      "keyCode": "def isValid(s: str) -> bool:\n    pairs = {\")\": \"(\", \"]\": \"[\", \"}\": \"{\"}\n    stack = []\n    for ch in s:\n        if ch in pairs:\n            if not stack or stack.pop() != pairs[ch]:\n                return False\n        else:\n            stack.append(ch)\n    return not stack",
+      "whyItWorks": "The stack always holds the still-open brackets in order. A closer is only valid against the top; an empty stack on a closer or a non-empty stack at the end signals imbalance.",
+      "timeComplexity": "O(n) — each character is pushed/popped at most once.",
+      "spaceComplexity": "O(n) — worst case all opening brackets.",
+      "similarProblems": ["Min Stack", "Generate Parentheses", "Longest Valid Parentheses"]
+    }
+  },
+  "binary-search": {
+    "leetcodeNumber": 704,
+    "title": "Binary Search",
+    "slug": "binary-search",
+    "difficulty": "Easy",
+    "pattern": "Binary Search",
+    "leetcodeUrl": "https://leetcode.com/problems/binary-search/",
+    "tags": ["binary-search", "sorted-array"],
+    "starter": {
+      "coreIdea": "On a sorted array, comparing with the middle element lets you discard half the search space every step. Keep an inclusive `[left, right]` window and shrink it.",
+      "pattern": "Binary Search — halving a monotonic search space.",
+      "standardApproach": "Use an inclusive window. Compute mid, compare to target, and move `left` or `right` past mid. Stop when the window is empty.",
+      "language": "python",
+      "keyCode": "def search(nums: list[int], target: int) -> int:\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = left + (right - left) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1",
+      "whyItWorks": "Sortedness guarantees that everything left of mid is smaller and everything right is larger, so each comparison safely eliminates half the candidates.",
+      "timeComplexity": "O(log n) — the window halves each iteration.",
+      "spaceComplexity": "O(1) — iterative, constant extra space.",
+      "similarProblems": ["Search Insert Position", "Find Minimum in Rotated Sorted Array", "Koko Eating Bananas"]
+    }
+  }
+}

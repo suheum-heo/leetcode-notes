@@ -23,7 +23,55 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Adding a Note
+## Adding a New Problem (Generator)
+
+The fastest way to add a note is the generator script. Give it a problem number,
+slug, title, or LeetCode URL and it creates a starter note in `content/problems/`:
+
+```bash
+npm run new:problem 217
+npm run new:problem contains-duplicate
+npm run new:problem "https://leetcode.com/problems/contains-duplicate/"
+```
+
+What it does:
+
+- Resolves the input against `content/problem-registry.json`.
+- Uses **today's local date** for `dateSolved`.
+- **Never overwrites** an existing note unless you pass a force flag:
+
+  ```bash
+  npm run new:problem 217 -- --force
+  ```
+
+  (The `--` is required so npm forwards the flag to the script.)
+
+### Known vs. unknown problems
+
+- **In the registry** (Contains Duplicate, Two Sum, Valid Anagram, Best Time to
+  Buy and Sell Stock, Valid Parentheses, Binary Search): the note is generated
+  with reference content for _Core Idea_, _Pattern_, _Improved / Standard
+  Approach_, _Key Code_, _Why It Works_, _Complexity_, and _Similar Problems_.
+  Personal sections are left blank as HTML comments.
+  Frontmatter: `source: "generated-starter"`, `status: "needs-personal-notes"`.
+
+- **Not in the registry**: a blank template is generated with the title/slug/URL
+  filled in where possible, every section left as an HTML-comment placeholder.
+  Frontmatter: `source: "manual-needed"`, `status: "needs-fill"`.
+
+To teach the generator a new problem, add an entry to
+`content/problem-registry.json` (keyed by slug) with a `starter` block.
+
+### Generated note sections
+
+`Core Idea` · `Pattern` · `My First Approach` · `Issue With My First Approach` ·
+`Improved / Standard Approach` · `Key Code` · `Why It Works` · `Complexity` ·
+`What I Learned` · `When To Use This Pattern Again` · `Similar Problems`
+
+The site shows a **status badge** on cards and a "Personal notes not added yet"
+reminder on the problem page until you fill in your _My First Approach_ section.
+
+## Adding a Note Manually
 
 Create a Markdown file in `content/problems/` (`.md` or `.mdx`) with frontmatter:
 

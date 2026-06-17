@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "new:problem": "node scripts/new-problem.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
