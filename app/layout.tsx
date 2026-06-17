@@ -29,18 +29,30 @@ export default function RootLayout({
                 pattern.notes
               </span>
             </Link>
-            <nav className="flex items-center gap-5 text-sm text-zinc-400">
-              <Link href="/" className="transition-colors hover:text-zinc-100">
+            <nav className="flex items-center gap-3 text-sm text-zinc-400 sm:gap-5">
+              <Link
+                href="/"
+                className="hidden transition-colors hover:text-zinc-100 sm:inline"
+              >
                 Patterns
               </Link>
               <a
                 href="https://leetcode.com"
                 target="_blank"
                 rel="noreferrer"
-                className="transition-colors hover:text-zinc-100"
+                className="hidden transition-colors hover:text-zinc-100 sm:inline"
               >
                 LeetCode
               </a>
+              <Link
+                href="/new"
+                className="inline-flex items-center gap-1 rounded-lg border border-zinc-700 bg-zinc-900/60 px-3 py-1.5 font-medium text-zinc-100 transition-colors hover:border-zinc-600 hover:bg-zinc-800"
+              >
+                <span aria-hidden className="text-sky-400">
+                  +
+                </span>
+                Add Problem
+              </Link>
             </nav>
           </header>
 

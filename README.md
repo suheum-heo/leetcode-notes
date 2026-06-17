@@ -23,10 +23,32 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Adding a New Problem (Generator)
+## Adding a New Problem
 
-The fastest way to add a note is the generator script. Give it a problem number,
-slug, title, or LeetCode URL and it creates a starter note in `content/problems/`:
+There are two ways to add a note — both share the same generator logic in
+`lib/problem-generator.mjs`, so they behave identically.
+
+### 1. From the frontend (`/new`)
+
+Click **"+ Add Problem"** in the header (or visit
+[`/new`](http://localhost:3000/new)) and fill in the form:
+
+- **Main input:** a LeetCode URL, problem number, slug, or title.
+- **Advanced options:** `dateSolved` (defaults to today), a pattern override, a
+  difficulty override, and an **"Overwrite existing note"** checkbox.
+
+On submit it writes the Markdown file and redirects you to the new problem page.
+If the note already exists (and overwrite is off) you'll see a friendly
+"This note already exists." error.
+
+> This is a local developer tool — it has no auth/database, only writes inside
+> `content/problems/`, sanitizes the slug, and prevents path traversal. It never
+> fetches LeetCode problem statements; it only uses registry/template content.
+
+### 2. From the CLI (`npm run new:problem`)
+
+Give the script a problem number, slug, title, or LeetCode URL and it creates a
+starter note in `content/problems/`:
 
 ```bash
 npm run new:problem 217
