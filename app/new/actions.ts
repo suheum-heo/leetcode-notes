@@ -28,7 +28,7 @@ export async function createProblemAction(
 
   let slug: string;
   try {
-    const result = createProblemNote(input, {
+    const result = await createProblemNote(input, {
       force: overwrite,
       dateSolved: dateSolved || undefined,
       pattern: pattern || undefined,

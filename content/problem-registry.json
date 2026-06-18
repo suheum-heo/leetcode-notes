@@ -118,5 +118,25 @@
       "spaceComplexity": "O(1) — iterative, constant extra space.",
       "similarProblems": ["Search Insert Position", "Find Minimum in Rotated Sorted Array", "Koko Eating Bananas"]
     }
+  },
+  "subsets": {
+    "leetcodeNumber": 78,
+    "title": "Subsets",
+    "slug": "subsets",
+    "difficulty": "Medium",
+    "pattern": "Backtracking",
+    "leetcodeUrl": "https://leetcode.com/problems/subsets/",
+    "tags": ["array", "backtracking", "subsets"],
+    "starter": {
+      "coreIdea": "Generate every possible subset by making a choice for each number: include it or skip it.",
+      "pattern": "Backtracking — explore an implicit decision tree, adding and removing one element at a time as you recurse.",
+      "standardApproach": "Use DFS/backtracking: append the current path to the result, then explore choices from the next index onward, undoing each choice (pop) as you backtrack.",
+      "language": "python",
+      "keyCode": "def subsets(nums: list[int]) -> list[list[int]]:\n    res = []\n\n    def backtrack(start: int, path: list[int]) -> None:\n        res.append(path[:])\n        for i in range(start, len(nums)):\n            path.append(nums[i])\n            backtrack(i + 1, path)\n            path.pop()\n\n    backtrack(0, [])\n    return res",
+      "whyItWorks": "Each recursive path represents one subset, and moving the start index forward prevents duplicate ordering.",
+      "timeComplexity": "O(n * 2^n) — there are 2^n subsets and copying each costs up to O(n).",
+      "spaceComplexity": "O(n) recursion depth excluding output, O(n * 2^n) including the output list.",
+      "similarProblems": ["Subsets II", "Permutations", "Combination Sum"]
+    }
   }
 }

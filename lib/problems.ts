@@ -7,7 +7,8 @@ export type Difficulty = "Easy" | "Medium" | "Hard" | "Unknown";
 export type ProblemStatus =
   | "complete"
   | "needs-personal-notes"
-  | "needs-fill";
+  | "needs-fill"
+  | "needs-review";
 
 export interface ProblemFrontmatter {
   title: string;

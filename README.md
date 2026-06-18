@@ -28,7 +28,7 @@ Open [http://localhost:3000](http://localhost:3000).
 There are two ways to add a note — both share the same generator logic in
 `lib/problem-generator.mjs`, so they behave identically.
 
-### 1. From the frontend (`/new`)
+### Adding from the frontend (`/new`)
 
 Click **"+ Add Problem"** in the header (or visit
 [`/new`](http://localhost:3000/new)) and fill in the form:
@@ -45,7 +45,30 @@ If the note already exists (and overwrite is off) you'll see a friendly
 > `content/problems/`, sanitizes the slug, and prevents path traversal. It never
 > fetches LeetCode problem statements; it only uses registry/template content.
 
-### 2. From the CLI (`npm run new:problem`)
+### Editing a note
+
+Open any problem page and click **Edit** (next to the title) to go to
+`/problems/[slug]/edit`. Each frontmatter field (title, difficulty, pattern,
+LeetCode URL, date solved, tags, status, source) and each body section (Core
+Idea, Pattern, My First Approach, … Similar Problems) is its own field — you
+never edit raw markdown by hand. **Save changes** rewrites the markdown file
+(preserving frontmatter + the standard section order) and returns you to the
+note. Editing only touches the markdown file; it never changes
+`content/problem-registry.json`.
+
+### Deleting a note
+
+On a problem page, click **Delete**. A confirmation dialog warns that this
+removes the markdown file from `content/problems`. Confirming deletes the file
+and returns you to the home page.
+
+> **Filesystem workflow caveat:** Add/Edit/Delete read and write real files in
+> `content/problems/`. This works great locally, but on a serverless host
+> (e.g. Vercel) the filesystem is read-only/ephemeral, so these write operations
+> won't persist there. To make editing work in production, wire it up to a Git
+> commit (e.g. the GitHub API) or a database later.
+
+### From the CLI (`npm run new:problem`)
 
 Give the script a problem number, slug, title, or LeetCode URL and it creates a
 starter note in `content/problems/`:
@@ -68,20 +91,30 @@ What it does:
 
   (The `--` is required so npm forwards the flag to the script.)
 
-### Known vs. unknown problems
+### Resolution order
 
-- **In the registry** (Contains Duplicate, Two Sum, Valid Anagram, Best Time to
-  Buy and Sell Stock, Valid Parentheses, Binary Search): the note is generated
-  with reference content for _Core Idea_, _Pattern_, _Improved / Standard
-  Approach_, _Key Code_, _Why It Works_, _Complexity_, and _Similar Problems_.
-  Personal sections are left blank as HTML comments.
-  Frontmatter: `source: "generated-starter"`, `status: "needs-personal-notes"`.
+Both flows resolve the input in three steps (see `lib/problem-generator.mjs`):
 
-- **Not in the registry**: a blank template is generated with the title/slug/URL
-  filled in where possible, every section left as an HTML-comment placeholder.
-  Frontmatter: `source: "manual-needed"`, `status: "needs-fill"`.
+1. **Local registry** (`content/problem-registry.json`) — e.g. Contains
+   Duplicate, Two Sum, Subsets, Binary Search. Generates full reference content
+   (_Core Idea_, _Pattern_, _Improved / Standard Approach_, _Key Code_, _Why It
+   Works_, _Complexity_, _Similar Problems_); personal sections stay as HTML
+   comments. Frontmatter: `source: "generated-starter"`,
+   `status: "needs-personal-notes"`.
 
-To teach the generator a new problem, add an entry to
+2. **Live LeetCode metadata** — if not in the registry, the generator queries
+   LeetCode's public GraphQL API (and the problem list to map a number → slug)
+   for **metadata only**: title, slug, difficulty, and topic tags. It infers a
+   default pattern from the tags and writes an honest starter template. It
+   **never** fetches or copies the problem statement. So `78` becomes
+   `subsets.md` ("Subsets", Backtracking), not `problem-78.md`. Frontmatter:
+   `source: "leetcode-metadata"`, `status: "needs-personal-notes"`.
+
+3. **Blank template** — if the problem isn't in the registry and metadata can't
+   be fetched (offline / not found), a blank fill-me template is written.
+   Frontmatter: `source: "manual-needed"`, `status: "needs-fill"`.
+
+To give a problem curated content, add an entry to
 `content/problem-registry.json` (keyed by slug) with a `starter` block.
 
 ### Generated note sections

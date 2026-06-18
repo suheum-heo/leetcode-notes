@@ -10,6 +10,7 @@ import {
 import { DifficultyBadge } from "@/app/components/DifficultyBadge";
 import { StatusBadge } from "@/app/components/StatusBadge";
 import { Markdown } from "@/app/components/Markdown";
+import { ProblemActions } from "./ProblemActions";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -53,12 +54,15 @@ export default async function ProblemPage({ params }: PageProps) {
       </Link>
 
       <header className="mt-6 border-b border-zinc-900 pb-6">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="rounded-full bg-zinc-800/60 px-2.5 py-0.5 text-xs font-medium text-zinc-300">
-            {problem.pattern}
-          </span>
-          <DifficultyBadge difficulty={problem.difficulty} />
-          <StatusBadge status={problem.status} />
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-full bg-zinc-800/60 px-2.5 py-0.5 text-xs font-medium text-zinc-300">
+              {problem.pattern}
+            </span>
+            <DifficultyBadge difficulty={problem.difficulty} />
+            <StatusBadge status={problem.status} />
+          </div>
+          <ProblemActions slug={problem.slug} />
         </div>
 
         <h1 className="mt-4 text-3xl font-bold tracking-tight text-zinc-50">

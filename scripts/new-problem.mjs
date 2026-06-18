@@ -28,7 +28,13 @@ function fail(message) {
   process.exit(1);
 }
 
-function main() {
+const VERBS = {
+  "generated-starter": "Generated starter note (registry)",
+  "leetcode-metadata": "Generated note from LeetCode metadata",
+  "manual-needed": "Generated blank template",
+};
+
+async function main() {
   const argv = process.argv.slice(2);
   const force = argv.includes("--force") || argv.includes("-f");
   const positional = argv.filter((a) => !a.startsWith("-"));
@@ -42,17 +48,17 @@ function main() {
   const raw = positional.join(" ");
 
   try {
-    const result = createProblemNote(raw, { force, rootDir: ROOT });
-    const { meta, fromRegistry, relativePath } = result;
+    const result = await createProblemNote(raw, { force, rootDir: ROOT });
+    const { meta, relativePath } = result;
 
-    const verb = fromRegistry ? "Generated starter note" : "Generated blank template";
+    const verb = VERBS[meta.source] ?? "Generated note";
     console.log(`\u2713 ${verb}: ${relativePath}`);
     console.log(`  title:   ${meta.title}`);
     console.log(`  pattern: ${meta.pattern}`);
     console.log(`  status:  ${meta.status} (source: ${meta.source})`);
-    if (!fromRegistry) {
+    if (meta.source === "manual-needed") {
       console.log(
-        "  note:    not in registry — fill in the sections, or add it to content/problem-registry.json."
+        "  note:    no registry entry or LeetCode metadata — fill in the sections by hand."
       );
     }
   } catch (error) {
